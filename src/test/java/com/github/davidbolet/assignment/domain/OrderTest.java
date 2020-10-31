@@ -1,7 +1,7 @@
 package com.github.davidbolet.assignment.domain;
 
 import org.junit.Assert;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 import java.math.BigDecimal;
 

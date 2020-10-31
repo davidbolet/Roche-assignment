@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
+import java.util.NoSuchElementException;
 
 @Service
 public class DeleteProductUseCase {
@@ -19,11 +20,11 @@ public class DeleteProductUseCase {
     public DeleteProductUseCase.Response execute(DeleteProductUseCase.Request request) {
         Product toDelete;
         try {
-            toDelete = productRepository.getOne(request.getSku());
-        } catch (EntityNotFoundException enf) {
+            toDelete = productRepository.findById(request.getSku()).orElseThrow();
+        } catch (NoSuchElementException | EntityNotFoundException enf) {
             throw new ProductNotFoundException(String.format("Product with SKU %s does not exist!", request.getSku()));
         }
-        toDelete.setDeletedDate(LocalDateTime.now());
+        toDelete.setDeleted(LocalDateTime.now());
         return new DeleteProductUseCase.Response(productRepository.save(toDelete));
     }
 

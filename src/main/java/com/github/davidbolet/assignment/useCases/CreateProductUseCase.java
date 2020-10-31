@@ -1,9 +1,12 @@
 package com.github.davidbolet.assignment.useCases;
 
 import com.github.davidbolet.assignment.domain.Product;
+import com.github.davidbolet.assignment.exception.MissingRequiredFieldsException;
 import com.github.davidbolet.assignment.exception.ProductAlreadyExistsException;
 import com.github.davidbolet.assignment.repository.ProductRepository;
 import org.springframework.stereotype.Service;
+
+import static java.util.Objects.isNull;
 
 @Service
 public class CreateProductUseCase {
@@ -15,10 +18,17 @@ public class CreateProductUseCase {
     }
 
     public Response execute(Request request) {
+        checkRequiredFields(request.getProduct());
         if (productRepository.existsById(request.getProduct().getSku())) {
             throw new ProductAlreadyExistsException(String.format("Product with SKU %s already exists!", request.getProduct().getSku()));
         }
         return new Response(productRepository.save(request.getProduct()));
+    }
+
+    private void checkRequiredFields(Product product) {
+        if (isNull(product.getSku())||isNull(product.getName())||isNull(product.getPrice())||isNull(product.getCreationDate())) {
+            throw new MissingRequiredFieldsException();
+        }
     }
 
     public static class Request {

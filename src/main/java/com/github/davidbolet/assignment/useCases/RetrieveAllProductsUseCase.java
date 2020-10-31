@@ -4,6 +4,8 @@ import com.github.davidbolet.assignment.domain.Product;
 import com.github.davidbolet.assignment.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -16,7 +18,9 @@ public class RetrieveAllProductsUseCase {
     }
 
     public RetrieveAllProductsUseCase.Response execute(RetrieveAllProductsUseCase.Request request) {
-        return new Response(productRepository.findAll());
+        List<Product> result = new ArrayList<>();
+        productRepository.findAll().forEach(x -> result.add(x));
+        return new Response(result);
     }
 
     public static class Request {

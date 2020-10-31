@@ -1,5 +1,7 @@
 package com.github.davidbolet.assignment.domain;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -60,6 +62,7 @@ public class Order {
     }
 
     @Transient
+    @JsonGetter(value = "totalOrderAmount")
     public BigDecimal getTotalOrderPrice() {
         return products.stream().map(Product::getPrice).reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
     }

@@ -29,7 +29,7 @@ public class RetrieveAllProductsUseCaseTest {
     }
 
     @Test
-    public void RetrieveAllProductsShouldWork() {
+    public void RetrieveAllProductsShouldReturnAList() {
         Product p1 = new Product();
         p1.setName("TestProduct1");
         p1.setSku("12344");

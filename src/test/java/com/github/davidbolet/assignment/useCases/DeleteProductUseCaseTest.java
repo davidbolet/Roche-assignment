@@ -11,6 +11,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import javax.persistence.EntityNotFoundException;
 import java.math.BigDecimal;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
@@ -36,7 +37,7 @@ public class DeleteProductUseCaseTest {
         p1.setName("TestProduct");
         p1.setSku("12345");
         p1.setPrice(BigDecimal.valueOf(100));
-        given(productRepository.getOne(p1.getSku())).willReturn(p1);
+        given(productRepository.findById(p1.getSku())).willReturn(Optional.of(p1));
         given(productRepository.save(any(Product.class))).will(returnsFirstArg());
         Product deleted = deleteProductUseCase.execute(new DeleteProductUseCase.Request(p1.getSku())).getProduct();
         assertThat(deleted).isEqualTo(p1);
@@ -48,7 +49,7 @@ public class DeleteProductUseCaseTest {
         p1.setName("TestProduct");
         p1.setSku("12345");
         p1.setPrice(BigDecimal.valueOf(100));
-        given(productRepository.getOne(p1.getSku())).willThrow(EntityNotFoundException.class);
+        given(productRepository.findById(p1.getSku())).willThrow(EntityNotFoundException.class);
         deleteProductUseCase.execute(new DeleteProductUseCase.Request(p1.getSku()));
     }
 
